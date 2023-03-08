@@ -19,7 +19,12 @@ class InternetPopup {
 
   InternetPopup._internal();
 
-  void initialize({required BuildContext context, String? customMessage, String? customDescription, bool? onTapPop = false, Function? onChange}) {
+  void initialize(
+      {required BuildContext context,
+      String? customMessage,
+      String? customDescription,
+      bool? onTapPop = false,
+      Function? onChange}) {
     final navigator = Navigator.of(context);
     _connectivity.checkConnectivity().then((result) async {
       if (result != ConnectivityResult.none) {
@@ -34,15 +39,17 @@ class InternetPopup {
         }
       } else {
         _isDialogOn = true;
-        Alerts(context: context).customDialog(
-            type: AlertType.warning,
-            message: customMessage ?? 'No Internet Connection Found!',
-            description: customDescription ?? 'Please enable your internet',
-            showButton: onTapPop,
-            onTap: () {
-              _isDialogOn = false;
-              navigator.pop();
-            });
+        if (context.mounted) {
+          Alerts(context: context).customDialog(
+              type: AlertType.warning,
+              message: customMessage ?? 'No Internet Connection Found!',
+              description: customDescription ?? 'Please enable your internet',
+              showButton: onTapPop,
+              onTap: () {
+                _isDialogOn = false;
+                navigator.pop();
+              });
+        }
       }
     });
 
@@ -60,15 +67,17 @@ class InternetPopup {
         }
       } else {
         _isDialogOn = true;
-        Alerts(context: context).customDialog(
-            type: AlertType.warning,
-            message: customMessage ?? 'No Internet Connection Found!',
-            description: customDescription ?? 'Please enable your internet',
-            showButton: onTapPop,
-            onTap: () {
-              _isDialogOn = false;
-              navigator.pop();
-            });
+        if (context.mounted) {
+          Alerts(context: context).customDialog(
+              type: AlertType.warning,
+              message: customMessage ?? 'No Internet Connection Found!',
+              description: customDescription ?? 'Please enable your internet',
+              showButton: onTapPop,
+              onTap: () {
+                _isDialogOn = false;
+                navigator.pop();
+              });
+        }
       }
       if (onChange != null) {
         onChange(_isOnline);
@@ -76,7 +85,8 @@ class InternetPopup {
     });
   }
 
-  void initializeCustomWidget({required BuildContext context, required Widget widget}) {
+  void initializeCustomWidget(
+      {required BuildContext context, required Widget widget}) {
     final navigator = Navigator.of(context);
 
     _connectivity.checkConnectivity().then((result) async {
@@ -94,7 +104,7 @@ class InternetPopup {
       } else {
         _isDialogOn = true;
 
-        Alerts(context: context).showModalWithWidget(child: widget);
+       if (context.mounted)  Alerts(context: context).showModalWithWidget(child: widget);
       }
     });
 
@@ -113,14 +123,15 @@ class InternetPopup {
       } else {
         _isDialogOn = true;
 
-        Alerts(context: context).showModalWithWidget(child: widget);
+       if (context.mounted)  Alerts(context: context).showModalWithWidget(child: widget);
       }
     });
   }
 
   Future<bool> checkInternet() async {
     bool isConnected = false;
-    ConnectivityResult connectivityResult = await _connectivity.checkConnectivity();
+    ConnectivityResult connectivityResult =
+        await _connectivity.checkConnectivity();
     if (connectivityResult != ConnectivityResult.none) {
       isConnected = await InternetConnectionChecker().hasConnection;
     }

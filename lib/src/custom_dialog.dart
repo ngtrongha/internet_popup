@@ -128,7 +128,7 @@ class Alerts {
                                   alignment: Alignment.bottomRight,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.green,
+                                      backgroundColor: Colors.green,
                                       side: const BorderSide(
                                           color: Colors.white, width: 1.0),
                                     ),
